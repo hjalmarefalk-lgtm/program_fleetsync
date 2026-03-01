@@ -28,4 +28,4 @@ def dump_canonical_to_file(obj: Any, path: str | Path) -> None:
 def load_json_file(path: str | Path) -> Dict[str, Any]:
     """Load JSON from a file (UTF-8)."""
     source = Path(path)
-    return json.loads(source.read_text(encoding="utf-8"))
+    return json.loads(source.read_text(encoding="utf-8-sig"))

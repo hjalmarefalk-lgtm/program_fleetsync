@@ -1,0 +1,193 @@
+# FleetSync profile draft (.txt) → JSON profile
+#
+# Goal:
+# - You edit THIS file (easy to copy/paste and keep lists horizontal)
+# - Then you paste it into chat and ask: “convert this to a valid profile JSON”.
+# - I'll produce strict JSON that matches schemas/profiles_schema.json.
+#
+# Conventions
+# - Lines starting with # are comments.
+# - Key/value format: key = value
+# - Lists are comma-separated on one line: a, b, c
+# - Keep values exactly as they appear in Excel headers (case + accents matter).
+# - Empty list: (leave blank after '=') or write: []
+#
+# ============================================================================
+# [JOB] — top-level job metadata
+# ============================================================================
+[JOB]
+job_id = REPLACE_ME_JOB_ID
+export_label = REPLACE_ME_EXPORT_LABEL
+
+# Optional. Only include if your run flow expects it.
+# Example: 2026-01-02
+user_date =
+
+# ============================================================================
+# [WORKBOOK:<id>] — one section per workbook spec
+# ============================================================================
+[WORKBOOK:REPLACE_ME_WORKBOOK_ID]
+
+# REQUIRED: Workbook identifier used internally and in output naming.
+workbook_id = REPLACE_ME_WORKBOOK_ID
+
+# REQUIRED: The sheet name in the Excel source to read.
+# Example: Sheet1
+referenced_sheet = Sheet1
+
+# REQUIRED: Output workbook file name template.
+# You can use placeholders like {YYYY_MM_DD}.
+workbook_name_template = {YYYY_MM_DD}-{client}
+
+# Optional: If omitted in JSON, compiler falls back to workbook_id.
+client =
+
+# ---------------------------------------------------------------------------
+# [SPLIT] — how to split into logical subsets
+# ---------------------------------------------------------------------------
+[SPLIT:REPLACE_ME_WORKBOOK_ID]
+
+# REQUIRED: Column name to split on (must exist in the referenced sheet).
+split_col = REPLACE_ME_SPLIT_COL
+
+# REQUIRED: Which values to keep (everything else is excluded from this workbook split).
+selected_values = REPLACE_ME_VALUE_1, REPLACE_ME_VALUE_2
+
+# ---------------------------------------------------------------------------
+# [DROP_ROWS] — optional row filtering rules (repeat sections if needed)
+# ---------------------------------------------------------------------------
+# If you need multiple drop rules, add more blocks like:
+# [DROP_ROWS:REPLACE_ME_WORKBOOK_ID:1], [DROP_ROWS:...:2], etc.
+[DROP_ROWS:REPLACE_ME_WORKBOOK_ID:1]
+col = REPLACE_ME_DROP_COL
+# Rows where col equals ANY of these values are dropped.
+drop_values = REPLACE_ME_DROP_VALUE
+
+# ---------------------------------------------------------------------------
+# [COLUMN_POLICY] — which columns to keep/drop, and output order
+# ---------------------------------------------------------------------------
+[COLUMN_POLICY:REPLACE_ME_WORKBOOK_ID]
+
+# keep_cols: whitelist. If non-empty, output will only contain these columns.
+# This is the one you’ll usually copy/paste between profiles.
+keep_cols = Kontraktstyp, Kostnadsställe-Transportör, Rese-etikett
+
+# drop_cols: blacklist. If you use keep_cols, keep drop_cols empty unless you
+# have a special reason.
+drop_cols =
+
+# order_cols: output ordering. Often same as keep_cols.
+# If empty, the system may keep current order.
+order_cols = Kontraktstyp, Kostnadsställe-Transportör, Rese-etikett
+
+# ---------------------------------------------------------------------------
+# [ROW_ORDER] — sorting of rows in deterministic output
+# ---------------------------------------------------------------------------
+[ROW_ORDER:REPLACE_ME_WORKBOOK_ID]
+
+# REQUIRED: column(s) to sort by
+sort_keys = Körplansdatum, Resenärens tid
+
+# REQUIRED: either a single true/false or one true/false per sort_key
+# Examples:
+#   ascending = true
+#   ascending = true, true
+ascending = true, true
+
+# ---------------------------------------------------------------------------
+# [TOKENS] — optional derived columns / flags
+# ---------------------------------------------------------------------------
+# If you have no tokens, leave the whole tokens area empty and I’ll output: "tokens": []
+#
+# Token type currently seen in repo: presence_columns
+# It creates one or more output columns indicating whether certain values were present.
+
+[TOKEN:REPLACE_ME_WORKBOOK_ID:kontraktstyp_presence]
+# REQUIRED
+token_id = kontraktstyp_presence
+
+# REQUIRED: e.g. presence_columns
+token_type = presence_columns
+
+# REQUIRED: workbook or sheet
+scope = workbook
+
+# token inputs differ by token_type. For presence_columns, expected inputs:
+# - source_col: column to look at
+# - values: list of values to search for
+# - separator: if cell contains multiple values in a single string
+#
+# NOTE (LOCK): token output column names are generated deterministically as:
+#   <source_col>_<value>(__N)?
+# using Style C normalization and deterministic collision suffixing.
+# Token-derived output columns must NOT use legacy "token_" prefixes.
+source_col = Kontraktstyp
+values = authority, transportCompany
+separator = ,
+
+# ---------------------------------------------------------------------------
+# [SUMMARIES] — aggregated tables produced from the data
+# ---------------------------------------------------------------------------
+# In schema v2, the supported explicit summary is:
+# - summary_type = group_aggregate
+#   - scope: workbook|sheet|sheets
+#   - group_by: a column name
+#   - metrics: count_rows OR sum/max/min/avg(col) OR distinct_count/null_rate(col)
+#
+# If you omit summary_id, the compiler will generate a stable one.
+
+[SUMMARY:REPLACE_ME_WORKBOOK_ID:trips_per_day_workbook]
+summary_id = trips_per_day_workbook
+summary_type = group_aggregate
+scope = workbook
+
+# REQUIRED for group_aggregate
+group_by = Körplansdatum
+
+# Metrics format:
+# - count_rows
+# - sum:<col>
+# - max:<col>
+# - min:<col>
+# - avg:<col>
+# - distinct_count:<col>
+# - null_rate:<col>
+metrics = count_rows
+
+# Optional: order_by list (if your pipeline supports it)
+order_by = Körplansdatum
+
+# ============================================================================
+# Worked example (generic) — copy/paste and tweak
+# ============================================================================
+# [JOB]
+# job_id = example_job
+# export_label = example
+#
+# [WORKBOOK:wb_1]
+# workbook_id = wb_1
+# referenced_sheet = Sheet1
+# workbook_name_template = {YYYY_MM_DD}-{client}
+#
+# [SPLIT:wb_1]
+# split_col = Category
+# selected_values = A, B
+#
+# [ROW_ORDER:wb_1]
+# sort_keys = Category
+# ascending = true
+#
+# [TOKEN:wb_1:info_presence]
+# token_id = info_presence
+# token_type = presence_columns
+# scope = workbook
+# source_col = Info
+# values = VALUE_A, VALUE_B
+# separator = ,
+#
+# [SUMMARY:wb_1:s_group_metrics]
+# summary_id = s_group_metrics
+# summary_type = group_aggregate
+# scope = workbook
+# group_by = Group
+# metrics = count_rows, sum:Value, avg:Value, distinct_count:Value, null_rate:Info

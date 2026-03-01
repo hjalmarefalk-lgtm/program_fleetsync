@@ -1,0 +1,140 @@
+{
+  "job_id": "_TRELLEBORG_DAGLIG_",
+  "export_label": "_FÄRDTJÄNST_",
+  "workbooks": [
+    {
+      "workbook_id": "TRELLEBORG_DAGLIG",
+      "referenced_sheet": "Per resa",
+      "workbook_name_template": "{YYYY_MM_DD}-TRELLEBORG_DAGLIG",
+      "split": {
+        "split_col": "Rese-etikett",
+        "selected_values": [
+          "Trelleborg.Färdtjänst.Dagligverksamhet"
+        ]
+      },
+      "drop_rows": [
+        {
+          "col": "Kontraktstyp",
+          "drop_values": [
+            "transportCompany"
+          ]
+        }
+      ],
+      "contract_filter": {
+        "col": "Avräkning",
+        "values": [
+          "Trelleborg kommun FTJ"
+        ]
+      },
+      "column_policy": {
+        "keep_cols": [
+          "Avräkning",
+          "Kostnadsställe-Uppdragsgivare",
+          "Rese-etikett",
+          "Körplansnamn",
+          "Resenär",
+          "Körplansdatum",
+          "Resenärens tid",
+          "Planerad hämttid",
+          "Rapporterad hämttid",
+          "Planerad lämntid",
+          "Rapporterad lämntid",
+          "Hämtadress",
+          "Lämnadress",
+          "Fördelad kostnad (ex moms)",
+          "Egenavgift (inkl moms)",
+          "Andel",
+          "Direktresa (km)",
+          "Information",
+          "Förarledsagning",
+          "Ledsagare",
+          "Namn",
+          "Hämtort",
+          "Lämnort"
+        ],
+        "drop_cols": [],
+        "order_cols": [
+          "Avräkning",
+          "Kostnadsställe-Uppdragsgivare",
+          "Rese-etikett",
+          "Körplansnamn",
+          "Resenär",
+          "Körplansdatum",
+          "Resenärens tid",
+          "Planerad hämttid",
+          "Rapporterad hämttid",
+          "Planerad lämntid",
+          "Rapporterad lämntid",
+          "Hämtadress",
+          "Hämtort",
+          "Lämnadress",
+          "Lämnort",
+          "Fördelad kostnad (ex moms)",
+          "Egenavgift (inkl moms)",
+          "Andel",
+          "Direktresa (km)",
+          "Information",
+          "Förarledsagning",
+          "Ledsagare",
+          "Namn"
+        ]
+      },
+      "row_order": {
+        "sort_keys": [
+          "Rese-etikett",
+          "Resenär",
+          "Körplansdatum",
+          "Resenärens tid"
+        ],
+        "ascending": [
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "tokens": [
+        {
+          "token_id": "Information_presence",
+          "token_type": "presence_columns",
+          "inputs": {
+            "source_col": "Information",
+            "values": [
+              "Rullstolsplats",
+              "Trappklättring",
+              "Förarledsagning",
+              "Hand till hand"
+            ],
+            "separator": ","
+          },
+          "scope": "workbook"
+        }
+      ],
+      "summaries": [
+        {
+          "summary_id": "Egenavgift_workbook",
+          "summary_type": "group_aggregate",
+          "scope": "sheet",
+          "group_by": "Namn",
+          "metrics": [
+            {
+              "op": "count_rows"
+            },
+            {
+              "op": "sum",
+              "col": "Fördelad kostnad (ex moms)"
+            },
+            {
+              "op": "sum",
+              "col": "Egenavgift (inkl moms)"
+            },
+            {
+              "op": "max",
+              "col": "Direktresa (km)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

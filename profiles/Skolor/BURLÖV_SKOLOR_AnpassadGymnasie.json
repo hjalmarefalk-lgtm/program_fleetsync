@@ -1,0 +1,155 @@
+{
+  "job_id": "_BURLOV_SKOLOR_",
+  "export_label": "_SKOLOR_",
+  "workbooks": [
+    {
+      "workbook_id": "BURLOV_SKOLOR_gymnasie",
+      "referenced_sheet": "Per resa",
+      "workbook_name_template": "{YYYY_MM_DD}-BURLOV_SKOLOR_gymnasie",
+      "split": {
+        "split_col": "Rese-etikett",
+        "selected_values": [
+          "Burlöv.Skolresa Anpassad Gymnasie"
+        ]
+      },
+      "drop_rows": [
+        {
+          "col": "Kontraktstyp",
+          "drop_values": [
+            "transportCompany"
+          ]
+        }
+      ],
+      "contract_filter": {
+        "col": "Avräkning",
+        "values": [
+          "Burlöv kommun"
+        ]
+      },
+      "column_policy": {
+        "keep_cols": [
+          "Avräkning",
+          "Kostnadsställe-Uppdragsgivare",
+          "Rese-etikett",
+          "Körplansnamn",
+          "Resenär",
+          "Körplansdatum",
+          "Resenärens tid",
+          "Planerad hämttid",
+          "Rapporterad hämttid",
+          "Planerad lämntid",
+          "Rapporterad lämntid",
+          "Hämtadress",
+          "Lämnadress",
+          "Fördelad kostnad (ex moms)",
+          "Egenavgift (inkl moms)",
+          "Andel",
+          "Direktresa (km)",
+          "Information",
+          "Förarledsagning",
+          "Ledsagare",
+          "Personnummer",
+          "Hämtort",
+          "Lämnort"
+        ],
+        "drop_cols": [],
+        "order_cols": [
+          "Avräkning",
+          "Kostnadsställe-Uppdragsgivare",
+          "Rese-etikett",
+          "Körplansnamn",
+          "Resenär",
+          "Körplansdatum",
+          "Resenärens tid",
+          "Planerad hämttid",
+          "Rapporterad hämttid",
+          "Planerad lämntid",
+          "Rapporterad lämntid",
+          "Hämtadress",
+          "Hämtort",
+          "Lämnadress",
+          "Lämnort",
+          "Fördelad kostnad (ex moms)",
+          "Egenavgift (inkl moms)",
+          "Andel",
+          "Direktresa (km)",
+          "Information",
+          "Förarledsagning",
+          "Ledsagare",
+          "Personnummer"
+        ]
+      },
+      "row_order": {
+        "sort_keys": [
+          "Rese-etikett",
+          "Resenär",
+          "Körplansdatum",
+          "Resenärens tid"
+        ],
+        "ascending": [
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "tokens": [
+        {
+          "token_id": "Information_presence",
+          "token_type": "presence_columns",
+          "inputs": {
+            "source_col": "Information",
+            "values": [
+              "Rullstolsplats"
+            ],
+            "separator": ","
+          },
+          "scope": "workbook"
+        }
+      ],
+      "summaries": [
+        {
+          "summary_id": "Sammanfattning_ID",
+          "summary_type": "group_aggregate",
+          "scope": "workbook",
+          "group_by": "Personnummer",
+          "metrics": [
+            {
+              "op": "count_rows"
+            },
+            {
+              "op": "sum",
+              "col": "Fördelad kostnad (ex moms)"
+            }
+          ]
+        },
+        {
+          "summary_id": "Sammanfattning_rese-etikett",
+          "summary_type": "group_aggregate",
+          "scope": "workbook",
+          "group_by": "Rese-etikett",
+          "metrics": [
+            {
+              "op": "count_rows"
+            },
+            {
+              "op": "sum",
+              "col": "Fördelad kostnad (ex moms)"
+            }
+          ]
+        },
+        {
+          "summary_id": "Resor_per_dag_workbook",
+          "summary_type": "group_aggregate",
+          "scope": "workbook",
+          "group_by": "Körplansdatum",
+          "metrics": [
+            {
+              "op": "count_rows"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

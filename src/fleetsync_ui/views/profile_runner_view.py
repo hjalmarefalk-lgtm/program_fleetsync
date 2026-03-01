@@ -47,6 +47,7 @@ from ..services.problems_aggregator import ProblemItem, ProblemsSummary, aggrega
 from ..services.status_model import compute_correctness, compute_overlays
 from ..services.batch_summary import compute_batch_counts, deterministic_reason
 from ..services.workspace_root import find_workspace_root
+from ..services.xray_service import probe_xray
 from ..state import AppState
 from ..workers.run_job_worker import RunJobWorker
 
@@ -1003,6 +1004,8 @@ class ProfileRunnerView(QWidget):
             return
 
         headers = set(getattr(self._state.xray, "headers", ()) or ())
+        input_path = str(getattr(self._state, "input_path", "") or "").strip()
+        sheet_headers_cache: dict[str, set[str]] = {}
         visible = selected[: self._DETAILS_VISIBLE_CAP]
         hidden_count = max(0, len(selected) - len(visible))
 
@@ -1018,10 +1021,30 @@ class ProfileRunnerView(QWidget):
                     break
 
             required = self._collect_keep_columns(workbooks)
-            found, missing = self._compute_column_presence(required, headers)
-            if missing:
-                missing_text = self._format_missing_columns(missing)
-                self._details_problem_lines.append(f"{ref.name}: {sv.DETAILS_MISSING_PREFIX} {missing_text}")
+            headers_for_sheet = headers
+            if input_path and sheet and sheet != "—":
+                cached_headers = sheet_headers_cache.get(sheet)
+                if cached_headers is None:
+                    try:
+                        payload = probe_xray(input_path=input_path, sheet_name=sheet)
+                        xray_result = getattr(payload, "xray_result", None)
+                        raw_headers = tuple(getattr(xray_result, "headers", ()) or ())
+                        cached_headers = {h for h in raw_headers if isinstance(h, str)}
+                    except Exception:
+                        cached_headers = set()
+                    sheet_headers_cache[sheet] = cached_headers
+                if cached_headers:
+                    headers_for_sheet = cached_headers
+
+            if headers_for_sheet:
+                found, missing = self._compute_column_presence(required, headers_for_sheet)
+                if missing:
+                    missing_text = self._format_missing_columns(missing)
+                    self._details_problem_lines.append(f"{ref.name}: {sv.DETAILS_MISSING_PREFIX} {missing_text}")
+                missing_count = max(0, len(required) - found)
+                columns_line = f"  Kolumner (keep_cols): {found}/{len(required)} ({missing_count} saknas)"
+            else:
+                columns_line = "  Kolumner (keep_cols): —"
 
             tokens_count = 0
             summaries_count = 0
@@ -1035,14 +1058,13 @@ class ProfileRunnerView(QWidget):
 
             contract_text = self._format_contract_text(workbooks)
             split_text = self._format_split_text(workbooks)
-            missing_count = max(0, len(required) - found)
             detail_line = "\n".join(
                 [
                     f"{sanitize_text(ref.name)}",
                     f"  Kontrakt: {contract_text}",
                     f"  Split: {split_text}",
                     f"  Blad: {sheet}",
-                    f"  Kolumner (keep_cols): {found}/{len(required)} ({missing_count} saknas)",
+                    columns_line,
                     f"  Token: {tokens_count}    Summeringar: {summaries_count}",
                 ]
             )

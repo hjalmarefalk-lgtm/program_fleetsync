@@ -1,0 +1,76 @@
+{
+  "job_id": "REPLACE_ME_JOB_ID",
+  "export_label": "REPLACE_ME_EXPORT_LABEL",
+  "workbooks": [
+    {
+      "workbook_id": "wb_1",
+      "referenced_sheet": "Sheet1",
+      "workbook_name_template": "{YYYY_MM_DD}-{client}",
+      "split": {
+        "split_col": "",
+        "selected_values": []
+      },
+      "column_policy": {
+        "keep_cols": [],
+        "drop_cols": [],
+        "order_cols": []
+      },
+      "drop_rows": [
+        {
+          "col": "REPLACE_ME_DROP_COL",
+          "drop_values": [
+            "REPLACE_ME_DROP_VALUE"
+          ]
+        }
+      ],
+      "row_order": {
+        "sort_keys": [],
+        "ascending": true
+      },
+      "tokens": [
+        {
+          "token_id": "example_token",
+          "token_type": "presence_columns",
+          "inputs": {
+            "source_col": "Info",
+            "values": [
+              "VALUE_A",
+              "VALUE_B"
+            ],
+            "separator": ","
+          },
+          "scope": "workbook"
+        }
+      ],
+      "summaries": [
+        {
+          "summary_id": "s_group_aggregate",
+          "summary_type": "group_aggregate",
+          "scope": "workbook",
+          "group_by": "Group",
+          "metrics": [
+            {
+              "op": "count_rows"
+            },
+            {
+              "op": "sum",
+              "col": "Value"
+            },
+            {
+              "op": "avg",
+              "col": "Value"
+            },
+            {
+              "op": "distinct_count",
+              "col": "Value"
+            },
+            {
+              "op": "null_rate",
+              "col": "Info"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

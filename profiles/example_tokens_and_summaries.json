@@ -1,0 +1,38 @@
+{
+  "job_id": "example_tokens_and_summaries",
+  "export_label": "example",
+  "workbooks": [
+    {
+      "workbook_id": "wb_1",
+      "referenced_sheet": "Sheet1",
+      "workbook_name_template": "{YYYY_MM_DD}",
+      "split": {"split_col": "", "selected_values": []},
+      "column_policy": {"keep_cols": [], "drop_cols": [], "order_cols": []},
+      "drop_rows": [],
+      "row_order": {"sort_keys": ["Group"], "ascending": true},
+      "tokens": [
+        {
+          "token_id": "info_presence",
+          "token_type": "presence_columns",
+          "inputs": {"source_col": "Info", "values": ["VALUE_A", "VALUE_B"], "separator": ","},
+          "scope": "workbook"
+        }
+      ],
+      "summaries": [
+        {
+          "summary_id": "s_group_metrics",
+          "summary_type": "group_aggregate",
+          "scope": "workbook",
+          "group_by": "Group",
+          "metrics": [
+            {"op": "count_rows"},
+            {"op": "sum", "col": "Value"},
+            {"op": "avg", "col": "Value"},
+            {"op": "distinct_count", "col": "Value"},
+            {"op": "null_rate", "col": "Info"}
+          ]
+        }
+      ]
+    }
+  ]
+}

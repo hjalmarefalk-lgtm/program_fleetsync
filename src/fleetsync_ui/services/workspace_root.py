@@ -5,7 +5,7 @@ working directory.
 
 Strategy:
 - Walk upward from the fleetsync_ui package location until a marker is found.
-- Marker: RUNBOOK.md (preferred) or .git directory.
+- Marker: RUNBOOK.md (preferred), pyproject.toml, or .git directory.
 - If not found, fall back to Path.cwd().
 
 This module is pure Python (no Qt imports).
@@ -45,6 +45,8 @@ def find_workspace_root(*, start_dir: Optional[Path] = None) -> WorkspaceRootRes
     for candidate in _iter_parents(start_dir):
         if (candidate / "RUNBOOK.md").is_file():
             return WorkspaceRootResult(root=candidate, used_fallback=False, marker="RUNBOOK.md")
+        if (candidate / "pyproject.toml").is_file():
+            return WorkspaceRootResult(root=candidate, used_fallback=False, marker="pyproject.toml")
         if (candidate / ".git").exists():
             return WorkspaceRootResult(root=candidate, used_fallback=False, marker=".git")
 

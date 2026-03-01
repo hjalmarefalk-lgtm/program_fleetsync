@@ -1,0 +1,17 @@
+{
+  "job_id": "example_minimal_total_only",
+  "export_label": "example",
+  "workbooks": [
+    {
+      "workbook_id": "wb_1",
+      "referenced_sheet": "Sheet1",
+      "workbook_name_template": "{YYYY_MM_DD}",
+      "split": {"split_col": "", "selected_values": []},
+      "column_policy": {"keep_cols": [], "drop_cols": [], "order_cols": []},
+      "drop_rows": [],
+      "row_order": {"sort_keys": [], "ascending": true},
+      "tokens": [],
+      "summaries": []
+    }
+  ]
+}

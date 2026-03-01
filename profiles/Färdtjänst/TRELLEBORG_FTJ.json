@@ -1,0 +1,162 @@
+{
+  "job_id": "_TRELLEBORG_FTJ_",
+  "export_label": "_FÄRDTJÄNST_",
+  "workbooks": [
+    {
+      "workbook_id": "TRELLEBORG_FTJ",
+      "referenced_sheet": "Per resa",
+      "workbook_name_template": "{YYYY_MM_DD}-TRELLEBORG_FTJ",
+      "split": {
+        "split_col": "Rese-etikett",
+        "selected_values": [
+          "Trelleborg.Färdtjänst.Arbetsresa",
+          "Trelleborg.Färdtjänst.Dagligverksamhet",
+          "Trelleborg.Färdtjänst.DV",
+          "Trelleborg.Färdtjänst.FTJ"
+        ]
+      },
+      "drop_rows": [
+        {
+          "col": "Kontraktstyp",
+          "drop_values": [
+            "transportCompany"
+          ]
+        }
+      ],
+      "contract_filter": {
+        "col": "Avräkning",
+        "values": [
+          "Trelleborg kommun FTJ"
+        ]
+      },
+      "column_policy": {
+        "keep_cols": [
+          "Avräkning",
+          "Kostnadsställe-Uppdragsgivare",
+          "Rese-etikett",
+          "Körplansnamn",
+          "Resenär",
+          "Körplansdatum",
+          "Resenärens tid",
+          "Planerad hämttid",
+          "Rapporterad hämttid",
+          "Planerad lämntid",
+          "Rapporterad lämntid",
+          "Hämtadress",
+          "Lämnadress",
+          "Fördelad kostnad (ex moms)",
+          "Egenavgift (inkl moms)",
+          "Andel",
+          "Direktresa (km)",
+          "Information",
+          "Förarledsagning",
+          "Ledsagare",
+          "Namn",
+          "Hämtort",
+          "Lämnort"
+        ],
+        "drop_cols": [],
+        "order_cols": [
+          "Avräkning",
+          "Kostnadsställe-Uppdragsgivare",
+          "Rese-etikett",
+          "Körplansnamn",
+          "Resenär",
+          "Körplansdatum",
+          "Resenärens tid",
+          "Planerad hämttid",
+          "Rapporterad hämttid",
+          "Planerad lämntid",
+          "Rapporterad lämntid",
+          "Hämtadress",
+          "Hämtort",
+          "Lämnadress",
+          "Lämnort",
+          "Fördelad kostnad (ex moms)",
+          "Egenavgift (inkl moms)",
+          "Andel",
+          "Direktresa (km)",
+          "Information",
+          "Förarledsagning",
+          "Ledsagare",
+          "Namn"
+        ]
+      },
+      "row_order": {
+        "sort_keys": [
+          "Rese-etikett",
+          "Resenär",
+          "Körplansdatum",
+          "Resenärens tid"
+        ],
+        "ascending": [
+          true,
+          true,
+          true,
+          true
+        ]
+      },
+      "tokens": [
+        {
+          "token_id": "Information_presence",
+          "token_type": "presence_columns",
+          "inputs": {
+            "source_col": "Information",
+            "values": [
+              "Rullstolsplats",
+              "Trappklättring",
+              "Förarledsagning",
+              "Hand till hand"
+            ],
+            "separator": ","
+          },
+          "scope": "workbook"
+        }
+      ],
+      "summaries": [
+        {
+          "summary_id": "Sammanfattning_workbook",
+          "summary_type": "group_aggregate",
+          "scope": "workbook",
+          "group_by": "Rese-etikett",
+          "metrics": [
+            {
+              "op": "count_rows"
+            },
+            {
+              "op": "sum",
+              "col": "Fördelad kostnad (ex moms)"
+            },
+            {
+              "op": "sum",
+              "col": "information_rullstolsplats"
+            },
+            {
+              "op": "sum",
+              "col": "information_trappklättring"
+            },
+            {
+              "op": "sum",
+              "col": "information_förarledsagning"
+            },
+            {
+              "op": "sum",
+              "col": "information_hand_till_hand"
+            }
+          ]
+        },
+        {
+          "summary_id": "Resor_per_dag_workbook",
+          "summary_type": "group_aggregate",
+          "scope": "workbook",
+          "group_by": "Körplansdatum",
+          "metrics": [
+            {
+              "op": "count_rows"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
