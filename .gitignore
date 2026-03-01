@@ -13,6 +13,17 @@ venv/
 build/
 dist/
 *.egg-info/
+*.spec.bak
+
+# Release/output folders (generated)
+client_handoff/
+
+# Project planning/documentation not required to build exe
+deployment_prompt_chain_wave1/
+BUILD_EXE_MINIMUM.txt
+
+# Legal automation workspace (not required for exe build/runtime)
+packaging/
 
 # Tool caches
 .pytest_cache/
@@ -23,3 +34,12 @@ dist/
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Keep only required legal artifacts in extra_exefiles
+extra_exefiles/*
+!extra_exefiles/LICENSE.txt
+!extra_exefiles/THIRD_PARTY_NOTICES.txt
+!extra_exefiles/TERMS_AND_CONDITIONS.txt
+!extra_exefiles/PRIVACY_NOTICE.txt
+!extra_exefiles/licenses/
+!extra_exefiles/licenses/**

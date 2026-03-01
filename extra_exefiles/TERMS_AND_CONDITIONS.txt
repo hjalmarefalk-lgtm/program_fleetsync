@@ -1,0 +1,31 @@
+FleetSync Terms and Conditions
+
+Last updated: 2026-03-01
+
+1) License grant
+Subject to these terms, you are granted a non-exclusive, non-transferable right to use FleetSync for internal business or personal use in accordance with applicable law.
+
+2) Acceptable use
+You must not use FleetSync for unlawful purposes, to process data you do not have rights to process, or in a way that violates third-party rights.
+
+3) User responsibility for input data
+You are responsible for the legality, quality, and appropriateness of all input files, profile files, and generated outputs.
+
+4) Third-party software
+FleetSync includes third-party components under their own licenses.
+See THIRD_PARTY_NOTICES.txt and extra_exefiles/licenses/ for applicable third-party license terms.
+
+5) No warranty
+FleetSync is provided "AS IS" and "AS AVAILABLE," without warranties of any kind, express or implied, to the maximum extent permitted by law.
+
+6) Limitation of liability
+To the maximum extent permitted by law, the authors and distributors of FleetSync are not liable for indirect, incidental, special, consequential, or exemplary damages, including data loss, business interruption, or loss of profits.
+
+7) Governing law and venue
+Governing Law: Sweden
+Venue: Stockholms tingsrätt (Stockholm District Court), Sweden
+
+8) Contact
+Email: hjalmarefalk@gmail.com
+Phone: 070-419 73 20
+

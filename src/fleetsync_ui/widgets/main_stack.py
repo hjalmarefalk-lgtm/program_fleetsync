@@ -18,7 +18,8 @@ class MainStack(QWidget):
 
         self._tabs = QTabBar()
         self._tabs.addTab("Profile Runner")
-        self._tabs.addTab("Create new profile…")
+        creator_tab = self._tabs.addTab("Create new profile…")
+        self._tabs.setTabVisible(creator_tab, False)
         self._tabs.setExpanding(False)
 
         self._stack = QStackedWidget()

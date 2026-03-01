@@ -1,0 +1,31 @@
+FleetSync Privacy Notice
+
+Last updated: 2026-03-01
+
+FleetSync processes files locally on your device.
+We do not collect or transmit your workbook data by default.
+
+What data FleetSync uses:
+- Input workbooks and profile files you select.
+- Settings stored locally on your device (for example, selected folders and preferences).
+
+What FleetSync does not do by default:
+- No telemetry or analytics.
+- No automatic upload of your data to external servers.
+
+Output and storage:
+- Output files are saved locally, with Downloads used as default output unless you change it.
+- Settings are stored locally in your user profile/app data location.
+
+Support and data minimization:
+- If you contact support, share only what is needed to diagnose the issue.
+- Do not include sensitive personal or customer data unless explicitly requested.
+
+Retention:
+- FleetSync does not set a remote retention period because data stays on your device.
+- You control retention by deleting or archiving local files and outputs.
+
+Contact:
+- Email: hjalmarefalk@gmail.com
+- Phone: 070-419 73 20
+
